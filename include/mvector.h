@@ -44,6 +44,7 @@ public:
 
     MVector& operator=(const MVector &vec);
 
+
     friend bool operator==(const MVector &vec1,const MVector &vec2);
     friend MVector operator+(const MVector &vec,const double &val);
     friend MVector operator+(MVector vec1,MVector vec2);
@@ -53,6 +54,7 @@ public:
     friend MVector operator*(const double &val,const MVector &vec);
     friend MVector operator*( MVector vec1, MVector vec2);
     friend MVector operator/(const MVector &vec, const double &val);
+    friend double dot(const MVector &vec1,const MVector &vec2);
 
     friend MVector operator+=(const MVector &vec,const double &val);
     friend MVector operator+=(MVector vec1,MVector vec2);
@@ -62,6 +64,8 @@ public:
     friend MVector operator*=(const double &val,const MVector &vec);
     friend MVector operator*=( MVector vec1, MVector vec2);
     friend MVector operator/=(const MVector &vec, const double &val);
+
+
 
 
 

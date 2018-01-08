@@ -5,7 +5,7 @@
 #ifndef NBODYSOLVER_DEFINES_H
 #define NBODYSOLVER_DEFINES_H
 
-double timeStep = 0.1;
-double G = 1;
+static const double timeStep = 0.1;
+static const double G = 1;
 
 #endif //NBODYSOLVER_DEFINES_H

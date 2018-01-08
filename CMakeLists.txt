@@ -7,4 +7,10 @@ include_directories(include/)
 
 file(GLOB SOURCE_FILES include/*.h source/*.cpp)
 
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++ -std=c++11 -Wno-deprecated-register")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+endif()
+
 add_executable(NBodySolver ${SOURCE_FILES})

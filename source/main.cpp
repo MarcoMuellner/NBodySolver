@@ -1,34 +1,60 @@
 #include <cstdio>
-#include "body.h"
-#include "mvector.h"
+#include "eulerbody.h"
 
 using namespace std;
+
+void runEuler(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
+{
+    vector<EulerBody> bodies;
+    if (initPos.size() == initVel.size() && initVel.size() == mass.size())
+    {
+        auto itInitPos = initPos.begin();
+        auto itInitVel = initVel.begin();
+        auto itMass = mass.begin();
+
+        while(itInitPos != initPos.end() && itInitVel != initVel.end() && itMass != mass.end())
+        {
+            bodies.emplace_back(EulerBody(MVector(*itInitPos),MVector(*itInitVel),*itMass));
+            ++itInitPos;
+            ++itInitVel;
+            ++itMass;
+        }
+    }
+
+    for (int i = 0;i<=iterations;++i)
+    {
+        auto itBodies = bodies.begin();
+        while(itBodies != bodies.end())
+        {
+            itBodies->computeNextStep(bodies.begin(),bodies.end());
+            ++itBodies;
+        }
+
+        itBodies = bodies.begin();
+        while(itBodies != bodies.end())
+        {
+            itBodies->applyChanges();
+            ++itBodies;
+        }
+    }
+}
 
 int main(int argc, char *argv[])
 {
     vector<double> b1InitPos = {-10,10};
     vector<double> b1InitVel = {-10,10};
-    Body b1(MVector(b1InitPos),MVector(b1InitVel),10);
 
-    vector<double> b2InitPos = {20,-20};
-    vector<double> b2InitVel = {20,-20};
-    Body b2(MVector(b2InitPos),MVector(b2InitVel),10);
-    vector<double> mass;
-    mass.push_back(10);
 
-    for (int i = 0;i <= 5;i++)
-    {
-        vector<MVector> b1Pos;
-        b1Pos.push_back(b2.getPosition());
-        vector<MVector> b2Pos;
-        b2Pos.push_back(b1.getPosition());
+    vector<double> b2InitPos = {10,-10};
+    vector<double> b2InitVel = {10,-10};
 
-        b1.computeNextStep(b1Pos,mass);
-        b2.computeNextStep(b2Pos,mass);
+    vector<double> b3InitPos = {0,-10};
+    vector<double> b3InitVel = {0,-10};
 
-        printf("Pos1: %lf\n",b1.getPosition().abs());
-        printf("Pos2: %lf\n",b2.getPosition().abs());
-    }
+    vector<double> mass = {10,10,10};
+    vector<vector<double> > initPositions = {b1InitPos,b2InitPos,b3InitPos};
+    vector<vector<double> > initVel = {b1InitVel,b2InitVel,b3InitVel};
+    runEuler(initPositions,initVel,mass);
 
     return 1;
 }
