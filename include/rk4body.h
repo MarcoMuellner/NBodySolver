@@ -11,11 +11,16 @@ class RK4Body :public IBody
 {
 public:
     RK4Body(MVector initial_position, MVector initial_velocity, double mass);
+    MVector computeNextVelocity() override;
+    MVector computeNextPosition() override;
+
+    void computeK1(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt);
+    void computeK2(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt);
+    void computeK3(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt);
+    void computeK4(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt);
 private:
     RK4Body() = default;
 
-    MVector computeNextVelocity() override;
-    MVector computeNextPosition() override ;
 };
 
 #endif //NBODYSOLVER_RK4BODY_H

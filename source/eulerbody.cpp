@@ -10,10 +10,10 @@ EulerBody::EulerBody(MVector initial_position, MVector initial_velocity, double 
 
 MVector EulerBody::computeNextVelocity()
 {
-    return m_curr_velocity + m_curr_acceleration*timeStep;
+    return getVelocity() + getAcceleration()*timeStep;
 }
 
 MVector EulerBody::computeNextPosition()
 {
-    return m_curr_position + m_curr_velocity*timeStep;
+    return getPosition() + getVelocity()*timeStep;
 }

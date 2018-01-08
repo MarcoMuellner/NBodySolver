@@ -39,7 +39,7 @@ public:
     const unsigned long size(){return m_vector.size();}
     bool empty(){return m_vector.empty();}
 
-    void zeros(int count){m_vector = vector<double>(count);};
+    MVector &zeros(int count){m_vector = vector<double>(count);return *this;};
 
 
     MVector& operator=(const MVector &vec);
