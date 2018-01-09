@@ -52,6 +52,19 @@ MVector IBody::getAcceleration(ePosID posID)
     }
 }
 
+MVector IBody::getPreviousPosition(int id)
+{
+    int realID = m_positionList.size() + id;
+    if(!m_positionList.empty() && id < 0 && realID > 0)
+    {
+        return m_positionList[realID];
+    }
+    else if (!m_positionList.empty())
+    {
+        return m_positionList.back();
+    }
+}
+
 void IBody::setPosition(MVector value,ePosID posID)
 {
     if(m_position.size() > (int)posID)
@@ -110,9 +123,11 @@ void IBody::applyChanges()
 {
     setPosition(m_nextPosition);
     setVelocity(m_nextVelocity);
-    setAcceleration(m_nextAcceleration);
 
-    printf("Object %d, abs pos %lf\n",m_id,getPosition().abs());
+    if((m_positionList.size()-1)%50 == 0)
+    {
+        printf("It:%lu Object %d, abs pos %lf\n", m_positionList.size() - 1, m_id, getPosition().abs());
+    }
 
     m_positionList.push_back(m_nextPosition);
 }

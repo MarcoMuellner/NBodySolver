@@ -6,6 +6,7 @@
 #define NBODYSOLVER_MVECTOR_H
 
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -15,10 +16,11 @@ private:
     typedef vector<double> vectorObj;
     vectorObj m_vector;
 public:
-    MVector()=default;
+    MVector(){m_vector = vectorObj();}
     MVector(const MVector &vec) {m_vector = vec.m_vector;};
     explicit MVector(const double &scalar){m_vector.push_back(scalar);}
     explicit MVector(vector<double> &vec){m_vector = vec;};
+    explicit MVector(const vector<double> &vec){m_vector = vec;};
 
     ~MVector()= default;
 
@@ -39,7 +41,9 @@ public:
     const unsigned long size(){return m_vector.size();}
     bool empty(){return m_vector.empty();}
 
-    MVector &zeros(int count){m_vector = vector<double>(count);return *this;};
+    MVector &zeros(unsigned long count){m_vector = vector<double>(count);return *this;};
+
+    string toString();
 
 
     MVector& operator=(const MVector &vec);

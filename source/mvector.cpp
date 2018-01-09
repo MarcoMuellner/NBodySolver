@@ -34,6 +34,18 @@ double MVector::abs()
     return sqrt(val);
 }
 
+string MVector::toString()
+{
+    string retStr = "";
+    auto it = m_vector.begin();
+    while(it != m_vector.end())
+    {
+        retStr += to_string((*it)) + " ";
+        ++it;
+    }
+    return retStr;
+}
+
 /**
  * Plus operator for MVector class. Adds a scalar to every item of the vector
  * @note This could be improved using a lamda function (std::for_each or std::transform)

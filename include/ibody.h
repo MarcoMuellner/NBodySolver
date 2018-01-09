@@ -16,33 +16,37 @@ class IBody
 public:
     enum ePosID
     {
-        eCurr = 0,
-        eK1 = 1,
-        eK2 = 2,
-        eK3 = 3,
-        eK4 = 4,
+        eI_0 = 0,
+        eI_1 = 1,
+        eI_2 = 2,
+        eI_3 = 3,
+        eI_4 = 4,
     };
     IBody(MVector initial_position, MVector initial_velocity, double mass);
     ~IBody() = default;
 
-    MVector getPosition(ePosID posID = eCurr);
-    MVector getVelocity(ePosID posID = eCurr);
-    MVector getAcceleration(ePosID posID = eCurr);
+    MVector getPosition(ePosID posID = eI_0);
+    MVector getVelocity(ePosID posID = eI_0);
+    MVector getAcceleration(ePosID posID = eI_0);
     double getMass() const {return m_mass;};
-
-    void setVelocity(MVector value,ePosID posID = eCurr);
-    void setPosition(MVector value,ePosID posID = eCurr);
-    void setAcceleration(MVector value,ePosID posID = eCurr);
+    vector<MVector> getPositionHistory(){return m_positionList;};
+    MVector getPreviousPosition(int id=0);
 
     void applyChanges();
 
+    int getID() const {return m_id;}
+    static void resetID(){m_prevID = 0;};
 protected:
     IBody() = default;
     virtual MVector computeNextVelocity() = 0;
     virtual MVector computeNextPosition() = 0;
 
+    void setVelocity(MVector value,ePosID posID = eI_0);
+    void setPosition(MVector value,ePosID posID = eI_0);
+    void setAcceleration(MVector value,ePosID posID = eI_0);
+
     template<typename RandomAccessIterator>
-    MVector computeAcceleration(RandomAccessIterator beginIt,RandomAccessIterator endIt,ePosID posID = eCurr)
+    MVector computeAcceleration(RandomAccessIterator beginIt,RandomAccessIterator endIt,ePosID posID = eI_0)
     {
         MVector nextAcceleration;
         nextAcceleration.zeros(getAcceleration().size());
@@ -51,7 +55,7 @@ protected:
         {
             if(m_id != beginIt->getID())
             {
-                nextAcceleration += computeGravity(beginIt->getPosition(posID),beginIt->getMass());
+                nextAcceleration = nextAcceleration + computeGravity(beginIt->getPosition(posID),beginIt->getMass());
             }
             ++beginIt;
         }
@@ -59,7 +63,6 @@ protected:
     }
 
     MVector computeGravity(const MVector otherPosition, const double otherMass);
-    int getID() const {return m_id;}
 
     vector<MVector> m_position;
     vector<MVector> m_velocity;

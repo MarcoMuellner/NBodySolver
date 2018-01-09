@@ -1,12 +1,18 @@
-#include <cstdio>
+#include <fstream>
+#include <iostream>
+
 #include "eulerbody.h"
 #include "rk4body.h"
+#include "leapfrogbody.h"
+#include "verletbody.h"
 
 using namespace std;
 
-void runEuler(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
+template<class T>
+vector<T> createBodies(const vector<vector<double> > &initPos,const vector<vector<double> > &initVel,const vector<double> &mass)
 {
-    vector<EulerBody> bodies;
+    IBody::resetID();
+    vector<T> bodies;
     if (initPos.size() == initVel.size() && initVel.size() == mass.size())
     {
         auto itInitPos = initPos.begin();
@@ -15,14 +21,36 @@ void runEuler(vector<vector<double> > initPos, vector<vector<double> > initVel, 
 
         while(itInitPos != initPos.end() && itInitVel != initVel.end() && itMass != mass.end())
         {
-            bodies.emplace_back(EulerBody(MVector(*itInitPos),MVector(*itInitVel),*itMass));
+            bodies.emplace_back(T(MVector(*itInitPos),MVector(*itInitVel),*itMass));
             ++itInitPos;
             ++itInitVel;
             ++itMass;
         }
     }
+    return bodies;
 
-    for (int i = 0;i<=iterations;++i)
+}
+
+template<class T>
+void savePositionsToFile(vector<T> bodies,string fileName)
+{
+    for(auto it = bodies.begin();it != bodies.end();++it)
+    {
+        ofstream out(fileName+"_"+to_string(it->getID())+".txt");
+
+        vector<MVector> values = it->getPositionHistory();
+        for(auto valueIt = values.begin();valueIt != values.end();++valueIt)
+        {
+            out<< valueIt->toString() + "\n";
+        }
+    }
+}
+
+void runEuler(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
+{
+    vector<EulerBody> bodies = createBodies<EulerBody>(initPos,initVel,mass);
+
+    for (int i = 1;i<=iterations;++i)
     {
         auto itBodies = bodies.begin();
         while(itBodies != bodies.end())
@@ -38,26 +66,13 @@ void runEuler(vector<vector<double> > initPos, vector<vector<double> > initVel, 
             ++itBodies;
         }
     }
+    savePositionsToFile<EulerBody>(bodies,"EulerMethod");
 }
 
 void runRK4(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
 {
-    vector<RK4Body> bodies;
-    if (initPos.size() == initVel.size() && initVel.size() == mass.size())
-    {
-        auto itInitPos = initPos.begin();
-        auto itInitVel = initVel.begin();
-        auto itMass = mass.begin();
-
-        while(itInitPos != initPos.end() && itInitVel != initVel.end() && itMass != mass.end())
-        {
-            bodies.emplace_back(RK4Body(MVector(*itInitPos),MVector(*itInitVel),*itMass));
-            ++itInitPos;
-            ++itInitVel;
-            ++itMass;
-        }
-    }
-    for (int i = 0;i<iterations;++i)
+    vector<RK4Body> bodies = createBodies<RK4Body>(initPos,initVel,mass);
+    for (int i = 1;i<iterations;++i)
     {
         auto itBodies = bodies.begin();
         while(itBodies != bodies.end())
@@ -96,6 +111,75 @@ void runRK4(vector<vector<double> > initPos, vector<vector<double> > initVel, ve
             ++itBodies;
         }
     }
+    savePositionsToFile<RK4Body>(bodies,"RK4Method");
+}
+
+void runLeapfrog(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
+{
+    vector<LeapfrogBody> bodies = createBodies<LeapfrogBody>(initPos,initVel,mass);
+    for (int i = 1;i<iterations;++i)
+    {
+        auto itBodies = bodies.begin();
+        while(itBodies != bodies.end())
+        {
+            itBodies->computeCurrentAcceleration(bodies);
+            ++itBodies;
+        }
+
+        itBodies = bodies.begin();
+        while(itBodies != bodies.end())
+        {
+            itBodies->computeNextAcceleration(bodies);
+            ++itBodies;
+        }
+
+        itBodies = bodies.begin();
+        while(itBodies != bodies.end())
+        {
+            itBodies->applyChanges();
+            ++itBodies;
+        }
+    }
+
+    savePositionsToFile<LeapfrogBody>(bodies,"LeapfrogMethod");
+}
+
+void runVerlet(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
+{
+    vector<VerletBody> bodies = createBodies<VerletBody>(initPos,initVel,mass);
+
+    auto itBodies = bodies.begin();
+    while(itBodies != bodies.end())
+    {
+        itBodies->computeFirstStep(bodies);
+        ++itBodies;
+    }
+
+    itBodies = bodies.begin();
+    while(itBodies != bodies.end())
+    {
+        itBodies->applyChanges();
+        ++itBodies;
+    }
+
+    for (int i = 1;i<=iterations;++i)
+    {
+        itBodies = bodies.begin();
+        while(itBodies != bodies.end())
+        {
+            itBodies->computeNextStep(bodies);
+            ++itBodies;
+        }
+
+        itBodies = bodies.begin();
+        while(itBodies != bodies.end())
+        {
+            itBodies->applyChanges();
+            ++itBodies;
+        }
+    }
+
+    savePositionsToFile<VerletBody>(bodies,"VerletMethod");
 }
 
 int main(int argc, char *argv[])
@@ -115,6 +199,8 @@ int main(int argc, char *argv[])
     vector<vector<double> > initVel = {b1InitVel,b2InitVel,b3InitVel};
     runEuler(initPositions,initVel,mass);
     runRK4(initPositions,initVel,mass);
+    runLeapfrog(initPositions,initVel,mass);
+    runVerlet(initPositions,initVel,mass);
 
     return 1;
 }

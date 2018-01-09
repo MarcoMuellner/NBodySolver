@@ -19,7 +19,7 @@ private:
     VerletBody() = default;
 
     MVector computeNextVelocity() override;
-    MVector computNextPosition() override;
+    MVector computeNextPosition() override;
 };
 
 #endif //NBODYSOLVER_VERLETBODY_H_H
