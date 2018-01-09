@@ -6,6 +6,6 @@
 #define NBODYSOLVER_DEFINES_H
 
 static const double timeStep = 0.1;
-static const double G = 1;
+static const double G = 100;
 
 #endif //NBODYSOLVER_DEFINES_H

@@ -185,14 +185,14 @@ void runVerlet(vector<vector<double> > initPos, vector<vector<double> > initVel,
 int main(int argc, char *argv[])
 {
     vector<double> b1InitPos = {-10,10};
-    vector<double> b1InitVel = {-10,10};
+    vector<double> b1InitVel = {0,0};
 
 
     vector<double> b2InitPos = {10,-10};
-    vector<double> b2InitVel = {10,-10};
+    vector<double> b2InitVel = {0,0};
 
     vector<double> b3InitPos = {0,-10};
-    vector<double> b3InitVel = {0,-10};
+    vector<double> b3InitVel = {0,0};
 
     vector<double> mass = {10,10,10};
     vector<vector<double> > initPositions = {b1InitPos,b2InitPos,b3InitPos};
