@@ -1,0 +1,8 @@
+//
+// Created by marco on 09.01.18.
+//
+
+#ifndef NBODYSOLVER_LEAPFROGBODY_H
+#define NBODYSOLVER_LEAPFROGBODY_H
+
+#endif //NBODYSOLVER_LEAPFROGBODY_H
