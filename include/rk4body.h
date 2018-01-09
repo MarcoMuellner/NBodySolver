@@ -14,10 +14,10 @@ public:
     MVector computeNextVelocity() override;
     MVector computeNextPosition() override;
 
-    void computeK1(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt);
-    void computeK2(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt);
-    void computeK3(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt);
-    void computeK4(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt);
+    void computeK1(vector<RK4Body> bodies);
+    void computeK2(vector<RK4Body> bodies);
+    void computeK3(vector<RK4Body> bodies);
+    void computeK4(vector<RK4Body> bodies);
 private:
     RK4Body() = default;
 

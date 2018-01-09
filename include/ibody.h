@@ -25,21 +25,39 @@ public:
     IBody(MVector initial_position, MVector initial_velocity, double mass);
     ~IBody() = default;
 
-    virtual void computeNextStep(vector<IBody>::iterator beginIt,vector<IBody>::iterator endIt);
     MVector getPosition(ePosID posID = eCurr);
     MVector getVelocity(ePosID posID = eCurr);
     MVector getAcceleration(ePosID posID = eCurr);
+    double getMass() const {return m_mass;};
+
     void setVelocity(MVector value,ePosID posID = eCurr);
     void setPosition(MVector value,ePosID posID = eCurr);
     void setAcceleration(MVector value,ePosID posID = eCurr);
-    double getMass() const {return m_mass;};
+
     void applyChanges();
 
 protected:
     IBody() = default;
     virtual MVector computeNextVelocity() = 0;
     virtual MVector computeNextPosition() = 0;
-    MVector computeAcceleration(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt, ePosID posID = eCurr);
+
+    template<typename RandomAccessIterator>
+    MVector computeAcceleration(RandomAccessIterator beginIt,RandomAccessIterator endIt,ePosID posID = eCurr)
+    {
+        MVector nextAcceleration;
+        nextAcceleration.zeros(getAcceleration().size());
+
+        while(beginIt != endIt)
+        {
+            if(m_id != beginIt->getID())
+            {
+                nextAcceleration += computeGravity(beginIt->getPosition(posID),beginIt->getMass());
+            }
+            ++beginIt;
+        }
+        return nextAcceleration;
+    }
+
     MVector computeGravity(const MVector otherPosition, const double otherMass);
     int getID() const {return m_id;}
 

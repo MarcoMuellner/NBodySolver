@@ -12,7 +12,7 @@ class EulerBody : public IBody
 {
 public:
     EulerBody(MVector initial_position, MVector initial_velocity, double mass);
-
+    void computeNextStep(vector<EulerBody> bodies);
 private:
     EulerBody() = default;
 

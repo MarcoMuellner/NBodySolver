@@ -8,6 +8,13 @@ EulerBody::EulerBody(MVector initial_position, MVector initial_velocity, double 
 {
 }
 
+void EulerBody::computeNextStep(vector<EulerBody> bodies)
+{
+    m_nextVelocity = computeNextVelocity();
+    m_nextPosition = computeNextPosition();
+    m_nextAcceleration = computeAcceleration<vector<EulerBody>::iterator>(bodies.begin(),bodies.end());
+}
+
 MVector EulerBody::computeNextVelocity()
 {
     return getVelocity() + getAcceleration()*timeStep;

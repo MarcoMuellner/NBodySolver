@@ -14,6 +14,11 @@ IBody::IBody(MVector initial_position, MVector initial_velocity, double mass)
     setVelocity(initial_velocity);
 
     setAcceleration(MVector().zeros(initial_position.size()));
+
+    m_nextPosition.zeros(initial_position.size());
+    m_nextVelocity.zeros(initial_velocity.size());
+    m_nextAcceleration.zeros(initial_velocity.size());
+
     m_mass = mass;
     m_prevID = m_id;
 
@@ -30,10 +35,13 @@ MVector IBody::getPosition(ePosID posID)
 
 MVector IBody::getVelocity(ePosID posID)
 {
+    MVector retVal;
     if(m_velocity.size() > (int)posID)
     {
-        return m_velocity[posID];
+        retVal =  m_velocity[posID];
     }
+
+    return retVal;
 }
 
 MVector IBody::getAcceleration(ePosID posID)
@@ -91,30 +99,6 @@ void IBody::setAcceleration(MVector value,ePosID posID)
     {
         throw logic_error("You need to set previous position values before you can add one after that");
     }
-}
-
-void IBody::computeNextStep(vector<IBody>::iterator beginIt,vector<IBody>::iterator endIt)
-{
-    m_nextVelocity = computeNextVelocity();
-    m_nextPosition = computeNextPosition();
-    m_nextAcceleration = computeAcceleration(beginIt,
-                                             endIt);
-}
-
-MVector IBody::computeAcceleration(vector<IBody>::iterator beginIt, vector<IBody>::iterator endIt, ePosID posID)
-{
-    MVector nextAcceleration;
-    nextAcceleration.zeros(getAcceleration().size());
-
-    while(beginIt != endIt)
-    {
-        if(m_id != beginIt->getID())
-        {
-            nextAcceleration += computeGravity(beginIt->getPosition(posID),beginIt->getMass());
-        }
-        ++beginIt;
-    }
-    return nextAcceleration;
 }
 
 MVector IBody::computeGravity(const MVector otherPosition, const double otherMass)

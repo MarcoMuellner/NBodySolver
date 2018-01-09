@@ -27,7 +27,7 @@ void runEuler(vector<vector<double> > initPos, vector<vector<double> > initVel, 
         auto itBodies = bodies.begin();
         while(itBodies != bodies.end())
         {
-            itBodies->computeNextStep(bodies.begin(),bodies.end());
+            itBodies->computeNextStep(bodies);
             ++itBodies;
         }
 
@@ -57,33 +57,33 @@ void runRK4(vector<vector<double> > initPos, vector<vector<double> > initVel, ve
             ++itMass;
         }
     }
-    for (int i = 0;i<=iterations;++i)
+    for (int i = 0;i<iterations;++i)
     {
         auto itBodies = bodies.begin();
         while(itBodies != bodies.end())
         {
-            itBodies->computeK1(bodies.begin(),bodies.end());
+            itBodies->computeK1(bodies);
             ++itBodies;
         }
 
         itBodies = bodies.begin();
         while(itBodies != bodies.end())
         {
-            itBodies->computeK2(bodies.begin(),bodies.end());
+            itBodies->computeK2(bodies);
             ++itBodies;
         }
 
         itBodies = bodies.begin();
         while(itBodies != bodies.end())
         {
-            itBodies->computeK3(bodies.begin(),bodies.end());
+            itBodies->computeK3(bodies);
             ++itBodies;
         }
 
         itBodies = bodies.begin();
         while(itBodies != bodies.end())
         {
-            itBodies->computeK4(bodies.begin(),bodies.end());
+            itBodies->computeK4(bodies);
             ++itBodies;
         }
 
@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     vector<double> mass = {10,10,10};
     vector<vector<double> > initPositions = {b1InitPos,b2InitPos,b3InitPos};
     vector<vector<double> > initVel = {b1InitVel,b2InitVel,b3InitVel};
-    //runEuler(initPositions,initVel,mass);
+    runEuler(initPositions,initVel,mass);
     runRK4(initPositions,initVel,mass);
 
     return 1;
