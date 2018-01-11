@@ -30,6 +30,10 @@ public:
     void append(double scalar){m_vector.push_back(scalar);};
     void append(MVector vec){copy(vec.begin(),vec.end(),back_inserter(m_vector));};
 
+    /**
+     * Absolute value of vector. Iterates over components of vector, squares it and takes the squareroot of the sum.
+     * @return Scalar absolute value of vector.
+     */
     double abs();
 
     typedef vectorObj::iterator iterator;
@@ -45,18 +49,58 @@ public:
 
     string toString();
 
-
+    /**
+     * Assignment operator for MVector class. Assigns std::vector to current instance. Full copy of vector
+     * @param vec Vector to assigned with
+     * @return Instance of this class
+     */
     MVector& operator=(const MVector &vec);
 
 
     friend bool operator==(const MVector &vec1,const MVector &vec2);
+    /**
+     * Plus operator for MVector class. Adds a scalar to every item of the vector
+     * @note This could be improved using a lamda function (std::for_each or std::transform)
+     * @param vec vector to be added with
+     * @param val scalar value to be added
+     * @return vector of size of vec
+     */
     friend MVector operator+(const MVector &vec,const double &val);
+    /**
+     * Itemwhise addition of two vectors.
+     */
     friend MVector operator+(MVector vec1,MVector vec2);
+    /**
+    * Minus operator for MVector class. Subtracts a scalar for every item of the vector
+     * @param vec  vector to be subracted from
+     * @param val  scalar value to be subtracted
+     * @return vector of size of vec
+     */
     friend MVector operator-(const MVector &vec,const double &val);
+    /**
+     * Itemwhise subtraction of two vectors
+     */
     friend MVector operator-(MVector vec1,MVector vec2);
+    /**
+     * Multiplication of vector with scalar.
+     * @param vec vector to be multiplied with
+     * @param val scalar value to be multiplied with
+     * @return vector of size vec
+     */
     friend MVector operator*(const MVector &vec,const double &val);
+    /**
+     * Redundant class to allow scalar*vector
+     * @see operator*
+     */
     friend MVector operator*(const double &val,const MVector &vec);
+    /**
+     * Itemwhise multiplication of two vectors. Both vectors have to have equal size. Otherwhise will return empty vector
+     * @return Vector of size vec1 and 2.
+     */
     friend MVector operator*( MVector vec1, MVector vec2);
+    /**
+     * Divides all elements of the vector by val
+     */
     friend MVector operator/(const MVector &vec, const double &val);
     friend double dot(const MVector &vec1,const MVector &vec2);
 

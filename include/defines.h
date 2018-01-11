@@ -4,8 +4,13 @@
 
 #ifndef NBODYSOLVER_DEFINES_H
 #define NBODYSOLVER_DEFINES_H
+#include <math.h>
 
-static const double timeStep = 0.1;
-static const double G = 100;
+//Timestep
+static const double timeStep = 0.05;
+//Gravitational constant
+static const double G = 1;
+//Softening parameter
+static const double sigma = 0.8;
 
 #endif //NBODYSOLVER_DEFINES_H

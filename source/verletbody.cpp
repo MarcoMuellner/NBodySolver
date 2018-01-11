@@ -5,7 +5,7 @@
 #include <math.h>
 
 VerletBody::VerletBody(MVector initial_position, MVector initial_velocity, double mass)
-    :IBody(initial_position,initial_velocity,mass)
+    : IBody(initial_position, initial_velocity, mass, "Verlet")
 {
 }
 

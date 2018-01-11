@@ -5,7 +5,7 @@
 #include "rk4body.h"
 
 RK4Body::RK4Body(MVector initial_position, MVector initial_velocity, double mass)
-        :IBody(initial_position,initial_velocity,mass)
+        : IBody(initial_position, initial_velocity, mass, "RK4")
 {
 }
 

@@ -1,10 +1,12 @@
 #include <fstream>
+#include <math.h>
 #include <iostream>
 
 #include "eulerbody.h"
 #include "rk4body.h"
 #include "leapfrogbody.h"
 #include "verletbody.h"
+#include "helper.h"
 
 using namespace std;
 
@@ -182,25 +184,79 @@ void runVerlet(vector<vector<double> > initPos, vector<vector<double> > initVel,
     savePositionsToFile<VerletBody>(bodies,"VerletMethod");
 }
 
+void runAnalytical(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
+{
+
+}
+
+void runAlgorithms(vector<vector<double> > initPositions, vector<vector<double> > initVelocities,vector<double> mass,int it = 1000)
+{
+    Timer t;
+    runEuler(initPositions,initVelocities,mass,it);
+    cout << "Euler finished, time is " << t.elapsed() << " seconds" << endl;
+    t.reset();
+    runRK4(initPositions,initVelocities,mass,it);
+    cout << "RK4 finished, time is " << t.elapsed() << " seconds" << endl;
+    t.reset();
+    runLeapfrog(initPositions,initVelocities,mass,it);
+    cout <<"Leapfrog finished, time is " << t.elapsed() << " seconds" << endl;
+}
+
+void runNBodies(int bodies)
+{
+    vector<vector<double> > initPositions;
+    vector<vector<double> > initVel;
+    vector<double> mass;
+    for(int i = 0;i<bodies;++i)
+    {
+        double x = rand()%bodies;
+        double y = rand()%bodies;
+        cout << i <<" Body position " << x << " " << y << endl;
+        vector<double> pos = {x,y};
+        vector<double> vel = {0,0};
+
+        initPositions.push_back(pos);
+        initVel.push_back(vel);
+        mass.push_back(10);
+    }
+    runAlgorithms(initPositions,initVel,mass,1000);
+}
+
 int main(int argc, char *argv[])
 {
-    vector<double> b1InitPos = {-10,10};
-    vector<double> b1InitVel = {0,0};
+    /*
+    {
+        vector<double> b1InitPos2D = {5,0};
+        vector<double> b1InitVel2D = {0,sqrt(M_PI/4.5)};
 
+        vector<double> b2InitPos2D = {-5,0};
+        vector<double> b2InitVel2D = {0,-sqrt(M_PI/4.5)};
 
-    vector<double> b2InitPos = {10,-10};
-    vector<double> b2InitVel = {0,0};
+        vector<double> mass = {10,10};
+        vector<vector<double> > initPositions = {b1InitPos2D,b2InitPos2D};
+        vector<vector<double> > initVel = {b1InitVel2D,b2InitVel2D};
+        runAlgorithms(initPositions,initVel,mass);
+    }
+     */
 
-    vector<double> b3InitPos = {0,-10};
-    vector<double> b3InitVel = {0,0};
+    /*
+    {
+        vector<double> b1InitPos2D = {5, 0};
+        vector<double> b1InitVel2D = {0, sqrt(M_PI / 4.5)};
 
-    vector<double> mass = {10,10,10};
-    vector<vector<double> > initPositions = {b1InitPos,b2InitPos,b3InitPos};
-    vector<vector<double> > initVel = {b1InitVel,b2InitVel,b3InitVel};
-    runEuler(initPositions,initVel,mass);
-    runRK4(initPositions,initVel,mass);
-    runLeapfrog(initPositions,initVel,mass);
-    runVerlet(initPositions,initVel,mass);
+        vector<double> b2InitPos2D = {-5, 0};
+        vector<double> b2InitVel2D = {0, -sqrt(M_PI / 4.5)};
 
+        vector<double> b3InitPos2D = {0, 0};
+        vector<double> b3InitVel2D = {0,-1};
+
+        vector<double> mass = {10, 10, 10};
+        vector<vector<double> > initPositions = {b1InitPos2D, b2InitPos2D, b3InitPos2D};
+        vector<vector<double> > initVel = {b1InitVel2D, b2InitVel2D, b3InitVel2D};
+
+        runAlgorithms(initPositions, initVel, mass);
+    }
+     */
+    runNBodies(50);
     return 1;
 }

@@ -5,11 +5,7 @@
 #include "mvector.h"
 #include <math.h>
 
-/**
- * Assignment operator for MVector class. Assigns std::vector to current instance. Full copy of vector
- * @param vec Vector to assigned with
- * @return Instance of this class
- */
+
 MVector& MVector::operator=(const MVector &vec)
 {
     if(this == &vec)
@@ -18,10 +14,7 @@ MVector& MVector::operator=(const MVector &vec)
     return *this;
 }
 
-/**
- * Absolute value of vector. Iterates over components of vector, squares it and takes the squareroot of the sum.
- * @return Scalar absolute value of vector.
- */
+
 double MVector::abs()
 {
     double val = 0;
@@ -46,13 +39,7 @@ string MVector::toString()
     return retStr;
 }
 
-/**
- * Plus operator for MVector class. Adds a scalar to every item of the vector
- * @note This could be improved using a lamda function (std::for_each or std::transform)
- * @param vec vector to be added with
- * @param val scalar value to be added
- * @return vector of size of vec
- */
+
 MVector operator+(const MVector &vec,const double &val)
 {
     MVector retVec;
@@ -63,12 +50,7 @@ MVector operator+(const MVector &vec,const double &val)
     return retVec;
 }
 
-/**
- * Minus operator for MVector class. Subtracts a scalar for every item of the vector
- * @param vec  vector to be subracted from
- * @param val  scalar value to be subtracted
- * @return vector of size of vec
- */
+
 MVector operator-(const MVector &vec,const double &val)
 {
     MVector retVec;
@@ -79,12 +61,7 @@ MVector operator-(const MVector &vec,const double &val)
     return retVec;
 }
 
-/**
- * Multiplication of vector with scalar.
- * @param vec vector to be multiplied with
- * @param val scalar value to be multiplied with
- * @return vector of size vec
- */
+
 MVector operator*(const MVector &vec,const double &val)
 {
     MVector retVec;
@@ -95,19 +72,13 @@ MVector operator*(const MVector &vec,const double &val)
     return retVec;
 }
 
-/**
- * Redundant class to allow scalar*vector
- * @see operator*
- */
+
 MVector operator*(const double &val,const MVector &vec)
 {
     return vec*val;
 }
 
-/**
- * Itemwhise multiplication of two vectors. Both vectors have to have equal size. Otherwhise will return empty vector
- * @return Vector of size vec1 and 2.
- */
+
 MVector operator*(MVector vec1, MVector vec2)
 {
     MVector retVec;
@@ -126,9 +97,7 @@ MVector operator*(MVector vec1, MVector vec2)
     return retVec;
 }
 
-/**
- * Divides a Vector through a scalar value
- */
+
 MVector operator/(const MVector &vec,const double &val)
 {
     MVector retVec;
@@ -139,9 +108,7 @@ MVector operator/(const MVector &vec,const double &val)
     return retVec;
 }
 
-/**
- * Itemwhise addition of two vectors.
- */
+
 MVector operator+(MVector vec1,MVector vec2)
 {
     MVector retVec;
@@ -161,9 +128,7 @@ MVector operator+(MVector vec1,MVector vec2)
     return retVec;
 }
 
-/**
- * Itemwhise subtraction of two vectors
- */
+
 MVector operator-(MVector vec1,MVector vec2)
 {
     MVector retVec;

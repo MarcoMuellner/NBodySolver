@@ -1,26 +1,65 @@
-"""
-A simple example of an animated plot
-"""
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib import pyplot as plt
+from matplotlib import animation
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+import pylab as pl
 
-fig, ax = plt.subplots()
-Verlet1 = np.loadtxt("build/VerletMethod_1.txt").T
-x = Verlet1[0]
-line, = ax.plot(x, Verlet1[1],"x")
+strList = ["Euler"]#,"RK4","Leapfrog"]
+
+for i in strList:
+    ended = False;
+    counter = 1;
+    while not ended:
+        try:
+            obj = np.loadtxt("cmake-build-debug/"+i+"Method_"+str(counter)+".txt").T
+            pl.plot(obj[0],obj[1],label="Object"+str(counter))
+            counter +=1
+        except:
+            ended = True
+    pl.legend()
+    pl.title(i)
+    pl.xlabel("x")
+    pl.ylabel("y")
+    pl.show()
+
+for i in strList:
+    obj = []
+    ended = False
+    counter = 1
+    while not ended:
+        try:
+            obj.append(np.loadtxt("cmake-build-debug/"+i+"Method_"+str(counter)+".txt").T)
+            counter +=1
+        except:
+            ended = True
+
+    fig = plt.figure()
+    ax = plt.axes(xlim=(-100,100),ylim=(-100,100))
+    lines = []
+    for x in obj:
+        lobj = ax.plot([], [], 'bo', ms=10)
+        lines.extend(lobj)
+
+    ax.set_title(i)
+
+    def init():
+        for line in lines:
+            line.set_data([],[])
+        return lines
 
 
-def animate(i):
-    line.set_data(x[i],Verlet1[1][i])  # update the data
-    return line,
+    def animate(i):
+        for line,objects in zip(lines,obj):
+            line.set_data(objects[0][i],objects[1][i])
+
+        return lines
+
+    # call the animator.  blit=True means only re-draw the parts that have changed.
+    anim = animation.FuncAnimation(fig, animate, init_func=init,
+                                   frames=int(len(obj[0][0])), interval=1, blit=False)
+
+    plt.show()
 
 
-# Init only required for blitting to give a clean slate.
-def init():
-    line.set_ydata(np.ma.array(x, mask=True))
-    return line,
 
-ani = animation.FuncAnimation(fig, animate, np.arange(1, 200), init_func=init,
-                              interval=25, blit=True)
-plt.show()

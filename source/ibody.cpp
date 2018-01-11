@@ -4,11 +4,14 @@
 #include "ibody.h"
 #include <math.h>
 #include <stdexcept>
+#include <iostream>
 
 int IBody::m_prevID = 0;
 
-IBody::IBody(MVector initial_position, MVector initial_velocity, double mass)
-        :m_id(m_prevID+1)
+IBody::IBody(MVector &initial_position, MVector &initial_velocity, const double &mass, const string algorithmName)
+        :m_mass(mass)
+        ,m_id(m_prevID+1)
+        ,m_algorithm(algorithmName)
 {
     setPosition(initial_position);
     setVelocity(initial_velocity);
@@ -19,40 +22,51 @@ IBody::IBody(MVector initial_position, MVector initial_velocity, double mass)
     m_nextVelocity.zeros(initial_velocity.size());
     m_nextAcceleration.zeros(initial_velocity.size());
 
-    m_mass = mass;
     m_prevID = m_id;
 
     m_positionList.push_back(initial_position);
 }
 
-MVector IBody::getPosition(ePosID posID)
+MVector IBody::getPosition(const ePosID posID)
 {
     if(m_position.size() > (int)posID)
     {
         return m_position[posID];
     }
+    else
+    {
+        throw logic_error("The posID you input doesn't exist");
+    }
 }
 
-MVector IBody::getVelocity(ePosID posID)
+MVector IBody::getVelocity(const ePosID posID)
 {
     MVector retVal;
     if(m_velocity.size() > (int)posID)
     {
         retVal =  m_velocity[posID];
     }
+    else
+    {
+        throw logic_error("The posID you input doesn't exist");
+    }
 
     return retVal;
 }
 
-MVector IBody::getAcceleration(ePosID posID)
+MVector IBody::getAcceleration(const ePosID posID)
 {
     if(m_acceleration.size() > (int)posID)
     {
         return m_acceleration[posID];
     }
+    else
+    {
+        throw logic_error("The posID you input doesn't exist");
+    }
 }
 
-MVector IBody::getPreviousPosition(int id)
+MVector IBody::getPreviousPosition(const int id)
 {
     int realID = m_positionList.size() + id;
     if(!m_positionList.empty() && id < 0 && realID > 0)
@@ -63,9 +77,13 @@ MVector IBody::getPreviousPosition(int id)
     {
         return m_positionList.back();
     }
+    else
+    {
+        throw logic_error("PositionList appears to be empty! You cannot access it without setting something first");
+    }
 }
 
-void IBody::setPosition(MVector value,ePosID posID)
+void IBody::setPosition(const MVector &value, const ePosID posID)
 {
     if(m_position.size() > (int)posID)
     {
@@ -79,10 +97,9 @@ void IBody::setPosition(MVector value,ePosID posID)
     {
         throw logic_error("You need to set previous position values before you can add one after that");
     }
-    return;
 }
 
-void IBody::setVelocity(MVector value,ePosID posID)
+void IBody::setVelocity(const MVector &value, const ePosID posID)
 {
     if(m_velocity.size() > (int)posID)
     {
@@ -98,7 +115,7 @@ void IBody::setVelocity(MVector value,ePosID posID)
     }
 }
 
-void IBody::setAcceleration(MVector value,ePosID posID)
+void IBody::setAcceleration(const MVector &value, const ePosID posID)
 {
     if(m_acceleration.size() > (int)posID)
     {
@@ -114,9 +131,9 @@ void IBody::setAcceleration(MVector value,ePosID posID)
     }
 }
 
-MVector IBody::computeGravity(const MVector otherPosition, const double otherMass)
+MVector IBody::computeGravity(const MVector &otherPosition, const double otherMass)
 {
-    return -G*otherMass*(getPosition() - otherPosition)/pow((getPosition() - otherPosition).abs(),3);
+    return -G*otherMass*(getPosition() - otherPosition)/pow(((getPosition() - otherPosition).abs()+sigma),3);
 }
 
 void IBody::applyChanges()
@@ -124,9 +141,9 @@ void IBody::applyChanges()
     setPosition(m_nextPosition);
     setVelocity(m_nextVelocity);
 
-    if((m_positionList.size()-1)%50 == 0)
+    if((m_positionList.size()-1)%100 == 0)
     {
-        printf("It:%lu Object %d, abs pos %lf\n", m_positionList.size() - 1, m_id, getPosition().abs());
+        cout << m_algorithm << ",It:" << m_positionList.size()-1<<" Object"<< m_id << " pos " << getPosition().toString() << endl;
     }
 
     m_positionList.push_back(m_nextPosition);
