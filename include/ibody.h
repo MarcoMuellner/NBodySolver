@@ -70,6 +70,14 @@ public:
      */
     vector<MVector> getPositionHistory(){return m_positionList;};
     /**
+     * @return Returns the history of kinetic energies of the particle
+     */
+    vector<double> getKineticEnergyHistory(){return m_kineticEnergyList;};
+    /**
+     * @return Returns the history of the potential energies of the particle
+     */
+    vector<double> getPotentialEnergyList(){return m_potentialEnergyList;};
+    /**
      * Returns a specific position.
      * @param id Specify from 0 to -inf. 0 is the current position.
      * @return Returns a specific positions.
@@ -136,17 +144,20 @@ protected:
     {
         MVector nextAcceleration;
         nextAcceleration.zeros(getAcceleration().size());
+        m_nextPotentialEnergy = 0;
 
         while(beginIt != endIt)
         {
             if(m_id != beginIt->getID())
             {
-                nextAcceleration = nextAcceleration + computeGravity(beginIt->getPosition(posID),beginIt->getMass());
-            }
+                nextAcceleration = nextAcceleration + computeGravity(beginIt->getPosition(posID),beginIt->getMass()); }
             ++beginIt;
         }
         return nextAcceleration;
     }
+
+    double getKineticEnergy(const ePosID posID = eI_0){return pow((getMass()*getVelocity(posID)).abs(),2)/(2*getMass());}
+
 
     /**
      * Computes the gravity vector for a given other object
@@ -160,12 +171,16 @@ protected:
     vector<MVector> m_velocity;
     vector<MVector> m_acceleration;
 
+
     MVector m_nextVelocity;
     MVector m_nextPosition;
     MVector m_nextAcceleration;
+    double m_nextPotentialEnergy;
 
     const double m_mass;
     vector< MVector > m_positionList;
+    vector< double > m_kineticEnergyList;
+    vector< double > m_potentialEnergyList;
 
     const int m_id;
     const string m_algorithm;

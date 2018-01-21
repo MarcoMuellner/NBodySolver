@@ -25,6 +25,8 @@ IBody::IBody(MVector &initial_position, MVector &initial_velocity, const double 
     m_prevID = m_id;
 
     m_positionList.push_back(initial_position);
+    m_potentialEnergyList.push_back(0);
+    m_kineticEnergyList.push_back(0);
 }
 
 MVector IBody::getPosition(const ePosID posID)
@@ -133,7 +135,11 @@ void IBody::setAcceleration(const MVector &value, const ePosID posID)
 
 MVector IBody::computeGravity(const MVector &otherPosition, const double otherMass)
 {
-    return -G*otherMass*(getPosition() - otherPosition)/pow(((getPosition() - otherPosition).abs()+sigma),3);
+    MVector distance = getPosition() - otherPosition;
+
+    m_nextPotentialEnergy += -G * getMass() * otherMass / ((distance.abs(sigma)));
+    return -G * otherMass * distance /
+           pow((distance.abs(sigma)), 3);
 }
 
 void IBody::applyChanges()
@@ -147,4 +153,6 @@ void IBody::applyChanges()
     }
 
     m_positionList.push_back(m_nextPosition);
+    m_potentialEnergyList.push_back(m_nextPotentialEnergy);
+    m_kineticEnergyList.push_back(getKineticEnergy());
 }

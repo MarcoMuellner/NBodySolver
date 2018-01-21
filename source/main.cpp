@@ -48,6 +48,34 @@ void savePositionsToFile(vector<T> bodies,string fileName)
     }
 }
 
+template<class T>
+void savePotentialEnergiesToFile(vector<T> bodies,string fileName)
+{
+    for(auto it = bodies.begin(); it!= bodies.end();++it)
+    {
+        ofstream out(fileName+"_E_POT_"+to_string(it->getID())+".txt");
+        vector<double> values = it->getPotentialEnergyList();
+        for(auto valueIt = values.begin();valueIt != values.end();++valueIt)
+        {
+            out<< (*valueIt) << "\n";
+        }
+    }
+}
+
+template<class T>
+void saveKineticEnergiesToFile(vector<T> bodies,string fileName)
+{
+    for(auto it = bodies.begin(); it!= bodies.end();++it)
+    {
+        ofstream out(fileName+"_E_KIN_"+to_string(it->getID())+".txt");
+        vector<double> values = it->getKineticEnergyHistory();
+        for(auto valueIt = values.begin();valueIt != values.end();++valueIt)
+        {
+            out<< (*valueIt) << "\n";
+        }
+    }
+}
+
 void runEuler(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
 {
     vector<EulerBody> bodies = createBodies<EulerBody>(initPos,initVel,mass);
@@ -69,6 +97,8 @@ void runEuler(vector<vector<double> > initPos, vector<vector<double> > initVel, 
         }
     }
     savePositionsToFile<EulerBody>(bodies,"EulerMethod");
+    savePotentialEnergiesToFile<EulerBody>(bodies,"EulerMethod");
+    saveKineticEnergiesToFile<EulerBody>(bodies,"EulerMethod");
 }
 
 void runRK4(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
@@ -114,6 +144,8 @@ void runRK4(vector<vector<double> > initPos, vector<vector<double> > initVel, ve
         }
     }
     savePositionsToFile<RK4Body>(bodies,"RK4Method");
+    savePotentialEnergiesToFile<RK4Body>(bodies,"RK4Method");
+    saveKineticEnergiesToFile<RK4Body>(bodies,"RK4Method");
 }
 
 void runLeapfrog(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
@@ -144,6 +176,8 @@ void runLeapfrog(vector<vector<double> > initPos, vector<vector<double> > initVe
     }
 
     savePositionsToFile<LeapfrogBody>(bodies,"LeapfrogMethod");
+    savePotentialEnergiesToFile<LeapfrogBody>(bodies,"LeapfrogMethod");
+    saveKineticEnergiesToFile<LeapfrogBody>(bodies,"LeapfrogMethod");
 }
 
 void runVerlet(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
@@ -182,6 +216,8 @@ void runVerlet(vector<vector<double> > initPos, vector<vector<double> > initVel,
     }
 
     savePositionsToFile<VerletBody>(bodies,"VerletMethod");
+    savePotentialEnergiesToFile<VerletBody>(bodies,"VerletMethod");
+    saveKineticEnergiesToFile<VerletBody>(bodies,"VerletMethod");
 }
 
 void runAnalytical(vector<vector<double> > initPos, vector<vector<double> > initVel, vector<double > mass,int iterations = 1000)
@@ -192,13 +228,18 @@ void runAnalytical(vector<vector<double> > initPos, vector<vector<double> > init
 void runAlgorithms(vector<vector<double> > initPositions, vector<vector<double> > initVelocities,vector<double> mass,int it = 1000)
 {
     Timer t;
+    /*
     runEuler(initPositions,initVelocities,mass,it);
     cout << "Euler finished, time is " << t.elapsed() << " seconds" << endl;
     t.reset();
+
     runRK4(initPositions,initVelocities,mass,it);
     cout << "RK4 finished, time is " << t.elapsed() << " seconds" << endl;
     t.reset();
+
     runLeapfrog(initPositions,initVelocities,mass,it);
+     */
+    runVerlet(initPositions,initVelocities,mass,it);
     cout <<"Leapfrog finished, time is " << t.elapsed() << " seconds" << endl;
 }
 
@@ -211,6 +252,8 @@ void runNBodies(int bodies)
     {
         double x = rand()%bodies;
         double y = rand()%bodies;
+        double v_x = rand()%bodies;
+        double v_y = rand()%bodies;
         cout << i <<" Body position " << x << " " << y << endl;
         vector<double> pos = {x,y};
         vector<double> vel = {0,0};
@@ -219,25 +262,26 @@ void runNBodies(int bodies)
         initVel.push_back(vel);
         mass.push_back(10);
     }
-    runAlgorithms(initPositions,initVel,mass,1000);
+    runAlgorithms(initPositions,initVel,mass,5000);
 }
 
 int main(int argc, char *argv[])
 {
     /*
     {
-        vector<double> b1InitPos2D = {5,0};
-        vector<double> b1InitVel2D = {0,sqrt(M_PI/4.5)};
+        vector<double> b1InitPos2D = {10,0};
+        vector<double> b1InitVel2D = {0,0};
 
-        vector<double> b2InitPos2D = {-5,0};
-        vector<double> b2InitVel2D = {0,-sqrt(M_PI/4.5)};
+        vector<double> b2InitPos2D = {-10,0};
+        vector<double> b2InitVel2D = {0,0};
 
         vector<double> mass = {10,10};
         vector<vector<double> > initPositions = {b1InitPos2D,b2InitPos2D};
         vector<vector<double> > initVel = {b1InitVel2D,b2InitVel2D};
-        runAlgorithms(initPositions,initVel,mass);
+        runAlgorithms(initPositions,initVel,mass,5000);
     }
      */
+
 
     /*
     {
@@ -257,6 +301,6 @@ int main(int argc, char *argv[])
         runAlgorithms(initPositions, initVel, mass);
     }
      */
-    runNBodies(50);
+    runNBodies(2);
     return 1;
 }

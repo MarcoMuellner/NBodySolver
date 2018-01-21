@@ -13,7 +13,7 @@ VerletBody::VerletBody(MVector initial_position, MVector initial_velocity, doubl
 void VerletBody::computeFirstStep(vector<VerletBody> bodies)
 {
     setAcceleration(computeAcceleration<vector<VerletBody>::iterator>(bodies.begin(),bodies.end()),eI_0);
-    m_nextPosition = getPosition()+getVelocity()*timeStep + pow(timeStep,2)*getAcceleration()/2;
+    m_nextPosition = getPosition()+getVelocity()*timeStep;
     m_nextVelocity = (m_nextPosition - getPosition())/timeStep;
 }
 

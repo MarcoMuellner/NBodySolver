@@ -15,7 +15,7 @@ MVector& MVector::operator=(const MVector &vec)
 }
 
 
-double MVector::abs()
+double MVector::abs(double additionalFactor)
 {
     double val = 0;
 
@@ -23,6 +23,8 @@ double MVector::abs()
     {
         val += pow((*it),2);
     }
+
+    val += pow(additionalFactor,2);
 
     return sqrt(val);
 }

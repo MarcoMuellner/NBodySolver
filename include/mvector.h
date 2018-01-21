@@ -34,7 +34,7 @@ public:
      * Absolute value of vector. Iterates over components of vector, squares it and takes the squareroot of the sum.
      * @return Scalar absolute value of vector.
      */
-    double abs();
+    double abs(double additionalFactor = 0.0);
 
     typedef vectorObj::iterator iterator;
     typedef vectorObj::const_iterator const_iterator;
@@ -112,10 +112,6 @@ public:
     friend MVector operator*=(const double &val,const MVector &vec);
     friend MVector operator*=( MVector vec1, MVector vec2);
     friend MVector operator/=(const MVector &vec, const double &val);
-
-
-
-
 
 };
 
