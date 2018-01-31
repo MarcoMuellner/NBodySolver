@@ -7,10 +7,10 @@
 #include <math.h>
 
 //Timestep
-static const double timeStep = 0.5;
+static const double timeStep = 0.01;
 //Gravitational constant
 static const double G = 1;
 //Softening parameter
-static const double sigma = 0.2;
+static const double sigma = 0.5;
 
 #endif //NBODYSOLVER_DEFINES_H

@@ -3,7 +3,7 @@ matplotlib.use('TkAgg')
 import numpy as np
 import pylab as pl
 
-strList = ["Verlet"]#,"RK4","Leapfrog"]
+strList = ["Euler","RK4","Leapfrog"]
 
 for i in strList:
     ended = False;
@@ -44,7 +44,7 @@ for i in strList:
     for vals in totalPos.T:
         positionPlot = np.append(positionPlot,np.abs(vals.T))
 
-    sum = totalPot/2 + totalKin
+    sum = totalPot+ totalKin
     pl.plot(totalPot,label="Potential Energy")
     pl.plot(totalKin,label="Kinetic Energy")
     pl.plot(sum, label="Sum")

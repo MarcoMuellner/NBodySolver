@@ -228,7 +228,7 @@ void runAnalytical(vector<vector<double> > initPos, vector<vector<double> > init
 void runAlgorithms(vector<vector<double> > initPositions, vector<vector<double> > initVelocities,vector<double> mass,int it = 1000)
 {
     Timer t;
-    /*
+
     runEuler(initPositions,initVelocities,mass,it);
     cout << "Euler finished, time is " << t.elapsed() << " seconds" << endl;
     t.reset();
@@ -236,11 +236,8 @@ void runAlgorithms(vector<vector<double> > initPositions, vector<vector<double> 
     runRK4(initPositions,initVelocities,mass,it);
     cout << "RK4 finished, time is " << t.elapsed() << " seconds" << endl;
     t.reset();
-
     runLeapfrog(initPositions,initVelocities,mass,it);
-     */
-    runVerlet(initPositions,initVelocities,mass,it);
-    cout <<"Leapfrog finished, time is " << t.elapsed() << " seconds" << endl;
+    cout << "Leapfrog finished, time is " << t.elapsed() << "seconds" << endl;
 }
 
 void runNBodies(int bodies)
@@ -267,40 +264,38 @@ void runNBodies(int bodies)
 
 int main(int argc, char *argv[])
 {
-    /*
+/*
     {
-        vector<double> b1InitPos2D = {10,0};
-        vector<double> b1InitVel2D = {0,0};
+        vector<double> b1InitPos2D = {5,0};
+        vector<double> b1InitVel2D = {0,0.5};
 
-        vector<double> b2InitPos2D = {-10,0};
-        vector<double> b2InitVel2D = {0,0};
+        vector<double> b2InitPos2D = {-5,0};
+        vector<double> b2InitVel2D = {0,-0.5};
 
         vector<double> mass = {10,10};
         vector<vector<double> > initPositions = {b1InitPos2D,b2InitPos2D};
         vector<vector<double> > initVel = {b1InitVel2D,b2InitVel2D};
         runAlgorithms(initPositions,initVel,mass,5000);
     }
-     */
+*/
 
-
-    /*
     {
-        vector<double> b1InitPos2D = {5, 0};
-        vector<double> b1InitVel2D = {0, sqrt(M_PI / 4.5)};
+        vector<double> b1InitPos2D = {2, 0};
+        vector<double> b1InitVel2D = {0, 0};
 
-        vector<double> b2InitPos2D = {-5, 0};
-        vector<double> b2InitVel2D = {0, -sqrt(M_PI / 4.5)};
+        vector<double> b2InitPos2D = {-3, 0};
+        vector<double> b2InitVel2D = {0, 0};
 
-        vector<double> b3InitPos2D = {0, 0};
-        vector<double> b3InitVel2D = {0,-1};
+        vector<double> b3InitPos2D = {0, sqrt(12)};
+        vector<double> b3InitVel2D = {0, 0};
 
-        vector<double> mass = {10, 10, 10};
+        vector<double> mass = {3, 4, 5};
         vector<vector<double> > initPositions = {b1InitPos2D, b2InitPos2D, b3InitPos2D};
         vector<vector<double> > initVel = {b1InitVel2D, b2InitVel2D, b3InitVel2D};
 
-        runAlgorithms(initPositions, initVel, mass);
+        runAlgorithms(initPositions, initVel, mass, 3000);
     }
-     */
-    runNBodies(2);
+
+//    runNBodies(10);
     return 1;
 }

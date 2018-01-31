@@ -5,7 +5,7 @@ from matplotlib import animation
 import numpy as np
 import pylab as pl
 
-strList = ["Verlet"]#,"RK4","Leapfrog"]
+strList = ["Euler","RK4","Leapfrog"]
 
 for i in strList:
     ended = False;
@@ -36,7 +36,7 @@ for i in strList:
             ended = True
 
     fig = plt.figure()
-    ax = plt.axes(xlim=(0,int(len(obj)*1.3)),ylim=(-0,int(len(obj)*1.3)))
+    ax = plt.axes(xlim=(-int(len(obj)*1.3),int(len(obj)*1.3)),ylim=(-int(len(obj)*1.3),int(len(obj)*1.3)))
     lines = []
     for x in obj:
         lobj = ax.plot([], [], 'bo', ms=10)
@@ -53,6 +53,7 @@ for i in strList:
     def animate(i):
         for line,objects in zip(lines,obj):
             line.set_data(objects[0][i],objects[1][i])
+            ax.set_title("it="+str(i))
 
         return lines
 
