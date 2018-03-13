@@ -30,5 +30,5 @@ To run the code simply call
 
 ```
 ./NBodySolver
-``
+```
 
