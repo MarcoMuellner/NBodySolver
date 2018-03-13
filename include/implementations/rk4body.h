@@ -5,7 +5,7 @@
 #ifndef NBODYSOLVER_RK4BODY_H
 #define NBODYSOLVER_RK4BODY_H
 
-#include "ibody.h"
+#include "support/ibody.h"
 
 class RK4Body :public IBody
 {

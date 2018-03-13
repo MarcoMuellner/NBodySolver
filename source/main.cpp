@@ -2,11 +2,11 @@
 #include <math.h>
 #include <iostream>
 
-#include "eulerbody.h"
-#include "rk4body.h"
-#include "leapfrogbody.h"
-#include "verletbody.h"
-#include "helper.h"
+#include "implementations/eulerbody.h"
+#include "implementations/rk4body.h"
+#include "implementations/leapfrogbody.h"
+#include "implementations/verletbody.h"
+#include "support/helper.h"
 
 using namespace std;
 

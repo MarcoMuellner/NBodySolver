@@ -1,7 +1,7 @@
 //
 // Created by Marco Müllner on 08.01.18.
 //
-#include "ibody.h"
+#include "support/ibody.h"
 #include <math.h>
 #include <stdexcept>
 #include <iostream>

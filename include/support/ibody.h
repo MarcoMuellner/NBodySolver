@@ -5,8 +5,8 @@
 #ifndef NBODYSOLVER_IBODY_H
 #define NBODYSOLVER_IBODY_H
 
-#include "mvector.h"
-#include "defines.h"
+#include "support/mvector.h"
+#include "support/defines.h"
 #include <list>
 
 using namespace std;

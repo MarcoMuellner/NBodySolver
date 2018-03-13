@@ -2,7 +2,7 @@
 // Created by marco on 09.01.18.
 //
 
-#include "leapfrogbody.h"
+#include "implementations/leapfrogbody.h"
 #include <math.h>
 
 LeapfrogBody::LeapfrogBody(MVector initial_position, MVector initial_velocity, double mass)

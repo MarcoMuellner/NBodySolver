@@ -16,15 +16,47 @@ private:
     typedef vector<double> vectorObj;
     vectorObj m_vector;
 public:
+    /**
+     * Constructor initializing the data with an empty vector object.
+     */
     MVector(){m_vector = vectorObj();}
+    /**
+     * Copy constructor, copies the vec object from foreign instance to lokal instance
+     * @param vec MVector object to be copied
+     */
     MVector(const MVector &vec) {m_vector = vec.m_vector;};
+    /**
+     * Constructor initializing the data with a single datapoint. Explicit to prohibit internal shananigans of the
+     * compiler
+     * @param scalar first value in vector object
+     */
     explicit MVector(const double &scalar){m_vector.push_back(scalar);}
+    /**
+     * Constructor initializing the data with a std::vector object. Probably most usecases would apply to this.
+     * Explicit to prohibit internal shananigans of the compiler. Reference wise passing of parameter.
+     * @param vec std::vector object containing the data. Sequence will stay the same
+     */
     explicit MVector(vector<double> &vec){m_vector = vec;};
+    /**
+     * Constructor initializing the data with a std::vector object. Probably most usecases would apply to this.
+     * Explicit to prohibit internal shananigans of the compiler. Full copy of parameter.
+     * @param vec std::vector object containing the data. Sequence will stay the same
+     */
     explicit MVector(const vector<double> &vec){m_vector = vec;};
 
     ~MVector()= default;
 
+    /**
+     * Access operator. Returns item at point i. Returns full value.
+     * @param i Sequence item
+     * @return double value of coordinate.
+     */
     double operator [](int i) const {return m_vector[i];};
+    /**
+     * Access operator. Returns item at point i. Returns reference to item.
+     * @param i Sequence item
+     * @return double value of coordinate.
+     */
     double & operator [](int i){return m_vector[i];};
 
     void append(double scalar){m_vector.push_back(scalar);};

@@ -5,7 +5,7 @@
 #ifndef NBODYSOLVER_VERLETBODY_H_H
 #define NBODYSOLVER_VERLETBODY_H_H
 
-#include "ibody.h"
+#include "support/ibody.h"
 
 using namespace std;
 

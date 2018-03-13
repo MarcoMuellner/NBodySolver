@@ -5,7 +5,7 @@
 #ifndef NBODYSOLVER_LEAPFROGBODY_H
 #define NBODYSOLVER_LEAPFROGBODY_H
 
-#include "ibody.h"
+#include "support/ibody.h"
 
 using namespace std;
 

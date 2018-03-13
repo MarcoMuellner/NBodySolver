@@ -1,7 +1,7 @@
 //
 // Created by marco on 09.01.18.
 //
-#include "verletbody.h"
+#include "implementations/verletbody.h"
 #include <math.h>
 
 VerletBody::VerletBody(MVector initial_position, MVector initial_velocity, double mass)
